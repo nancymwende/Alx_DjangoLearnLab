@@ -1,9 +1,12 @@
 from django.shortcuts import render # type: ignore
+from django.contrib.auth import login # type: ignore
 from django.views.generic.detail import DetailView # type: ignore
 from .models import Book
 from .models import Library
-from django.contrib.auth.forms import UserCreationForm
-from django.shortcuts import redirect
+from django.contrib.auth.forms import UserCreationForm # type: ignore
+from django.shortcuts import redirect # type: ignore
+
+
 
 def list_books(request):
     books = Book.objects.all()
