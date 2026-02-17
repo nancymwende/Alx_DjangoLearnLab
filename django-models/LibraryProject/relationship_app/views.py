@@ -1,5 +1,5 @@
 from django.shortcuts import render # type: ignore
-from django.contrib.auth import login # type: ignore
+from django.contrib.auth import login 
 from django.views.generic.detail import DetailView # type: ignore
 from .models import Book
 from .models import Library
@@ -17,7 +17,6 @@ class LibraryDetailView(DetailView):
     template_name = 'relationship_app/library_detail.html'
     context_object_name = 'library'
 
-# User Registration View
 def register(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
@@ -26,5 +25,4 @@ def register(request):
             return redirect('login')
     else:
         form = UserCreationForm()
-    
     return render(request, 'relationship_app/register.html', {'form': form})
