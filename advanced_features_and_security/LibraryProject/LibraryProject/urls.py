@@ -17,11 +17,16 @@ Including another URLconf
 
 from django.contrib import admin # type: ignore
 from django.urls import path, include # type: ignore
+from django.views.generic import RedirectView # type: ignore
+from django.contrib.auth import views as auth_views
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('relationship_app.urls')),
+    path('login/', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
+    path('logout/', auth_views.LogoutView.as_view(), name='logout'),
+    path('books/', include('relationship_app.urls')),
+    path('', RedirectView.as_view(pattern_name='list_books', permanent=False)),
 ]
 
 

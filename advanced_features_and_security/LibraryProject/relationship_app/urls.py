@@ -3,6 +3,9 @@ from . import views
 from django.contrib.auth import views as auth_views # type: ignore
 from .views import add_book, edit_book, delete_book
 from .views import list_books, LibraryDetailView, register
+
+
+
 urlpatterns = [
     path('books/', views.list_books, name='list_books'),
     path('library/<int:pk>/', views.LibraryDetailView.as_view(), name='library_detail'),
@@ -15,5 +18,9 @@ urlpatterns = [
     path('add_book/', views.add_book, name='add_book'),
     path('edit_book/<int:pk>/', views.edit_book, name='edit_book'),
     path('delete_book/<int:pk>/', views.delete_book, name='delete_book'),
+    path('', views.article_list, name='article_list'),
+    path('create/', views.create_article, name='create_article'),
+    path('edit/<int:pk>/', views.edit_article, name='edit_article'),
+    path('delete/<int:pk>/', views.delete_article, name='delete_article'),
 
 ]

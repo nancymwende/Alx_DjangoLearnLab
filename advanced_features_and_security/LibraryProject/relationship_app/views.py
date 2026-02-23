@@ -9,6 +9,9 @@ from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.decorators import permission_required
 from django.shortcuts import redirect, get_object_or_404
 from .forms import BookForm 
+from django.contrib.auth.decorators import permission_required, login_required
+from .models import Article
+from .forms import ArticleForm
 
 
 
@@ -77,3 +80,68 @@ def delete_book(request, pk):
         book.delete()
         return redirect('list_books')
     return render(request, 'relationship_app/delete_book.html', {'book': book})
+
+
+@login_required
+@permission_required('advanced_features_and_security.can_view', raise_exception=True)
+def article_list(request):
+    """
+    View articles.
+    Requires: can_view permission
+    """
+    articles = Article.objects.all()
+    return render(request, 'articles/list.html', {'articles': articles})
+
+
+@login_required
+@permission_required('advanced_features_and_security.can_create', raise_exception=True)
+def create_article(request):
+    """
+    Create a new article.
+    Requires: can_create permission
+    """
+    if request.method == "POST":
+        form = ArticleForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('article_list')
+    else:
+        form = ArticleForm()
+
+    return render(request, 'articles/create.html', {'form': form})
+
+
+@login_required
+@permission_required('advanced_features_and_security.can_edit', raise_exception=True)
+def edit_article(request, pk):
+    """
+    Edit an existing article.
+    Requires: can_edit permission
+    """
+    article = get_object_or_404(Article, pk=pk)
+
+    if request.method == "POST":
+        form = ArticleForm(request.POST, instance=article)
+        if form.is_valid():
+            form.save()
+            return redirect('article_list')
+    else:
+        form = ArticleForm(instance=article)
+
+    return render(request, 'articles/edit.html', {'form': form})
+
+
+@login_required
+@permission_required('advanced_features_and_security.can_delete', raise_exception=True)
+def delete_article(request, pk):
+    """
+    Delete an article.
+    Requires: can_delete permission
+    """
+    article = get_object_or_404(Article, pk=pk)
+
+    if request.method == "POST":
+        article.delete()
+        return redirect('article_list')
+
+    return render(request, 'articles/delete.html', {'article': article})

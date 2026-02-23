@@ -5,6 +5,8 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 
+
+
 class Author(models.Model):
     name = models.CharField(max_length=255)
 
@@ -23,12 +25,14 @@ class Book(models.Model):
     def __str__(self):
         return self.title
     
-class Meta:
-    permissions = [
-        ("can_add_book", "Can add book"),
-        ("can_change_book", "Can change book"),
-        ("can_delete_book", "Can delete book"),
-    ]
+    class Meta:
+        permissions = [
+            ("can_create", "Can create book"),
+            ("can_edit", "Can edit book"),
+            ("can_delete", "Can delete book"),
+            ("can_view", "Can view book"),
+        ]
+
 
 
 class Library(models.Model):
@@ -62,16 +66,39 @@ class UserProfile(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.role}"
+    
 
-# Automatically create UserProfile when a new User is created
+
+class Article(models.Model):
+    title = models.CharField(max_length=255)
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        permissions = [
+            ("can_view", "Can view article"),
+            ("can_create", "Can create article"),
+            ("can_edit", "Can edit article"),
+            ("can_delete", "Can delete article"),
+        ]
+
+    def __str__(self):
+        return self.title
+
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
 def create_user_profile(sender, instance, created, **kwargs):
+    """
+    Create a UserProfile automatically when a new user is created.
+    """
     if created:
         UserProfile.objects.create(user=instance)
 
+
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
 def save_user_profile(sender, instance, **kwargs):
-    instance.userprofile.save()
-
-
- 
+    """
+    Save the user profile if it exists.
+    Prevents errors during superuser creation.
+    """
+    if hasattr(instance, 'userprofile'):
+        instance.userprofile.save()
