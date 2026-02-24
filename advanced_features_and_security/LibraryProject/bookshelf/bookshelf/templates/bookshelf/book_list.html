@@ -1,0 +1,7 @@
+<h1>Books Available</h1>
+
+{% for book in books %}
+    <p>{{ book.title }} - {{ book.author }}</p>
+{% empty %}
+    <p>No books available.</p>
+{% endfor %}
