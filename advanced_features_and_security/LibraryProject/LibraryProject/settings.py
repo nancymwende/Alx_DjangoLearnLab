@@ -1,4 +1,3 @@
-from pathlib import Path
 
 SECURE_BROWSER_XSS_FILTER = True
 X_FRAME_OPTIONS = 'DENY'
