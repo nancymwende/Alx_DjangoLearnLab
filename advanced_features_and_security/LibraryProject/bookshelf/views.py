@@ -30,4 +30,4 @@ def add_book(request):
     else:
         form = BookForm()
 
-    return render(request, 'bookshelf/form_example.html', {'form': form})
+    return render(request, 'bookshelf/form_example.html', {'form': form})SS
