@@ -1,7 +1,9 @@
-
+# Additional security headers
 SECURE_BROWSER_XSS_FILTER = True
 X_FRAME_OPTIONS = 'DENY'
 SECURE_CONTENT_TYPE_NOSNIFF = True
+
+# Secure cookies
 CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = True
 
@@ -100,3 +102,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Custom user model
 # ==============================
 AUTH_USER_MODEL = 'bookshelf.CustomUser'
+
+# Redirect all HTTP requests to HTTPS
+SECURE_SSL_REDIRECT = True  # Step 1: Force HTTPS for all requests
+
+# HTTP Strict Transport Security (HSTS)
+SECURE_HSTS_SECONDS = 31536000  # 1 year in seconds
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True  # Apply HSTS to all subdomains
+SECURE_HSTS_PRELOAD = True  # Allow your site to be included in browser preload lists
