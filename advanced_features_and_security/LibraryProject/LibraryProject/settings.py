@@ -116,14 +116,15 @@ LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/login/'
 
 # -----------------------------
-# HTTPS & SECURITY SETTINGS
+# -----------------------------
+# HTTPS & Security Settings
 # -----------------------------
 
-# Force all HTTP requests to redirect to HTTPS
+# Force HTTPS for all requests
 SECURE_SSL_REDIRECT = True
 
 # HTTP Strict Transport Security (HSTS)
-SECURE_HSTS_SECONDS = 31536000  # 1 year
+SECURE_HSTS_SECONDS = 31536000           # 1 year
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 SECURE_HSTS_PRELOAD = True
 
@@ -132,12 +133,13 @@ SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 
 # Security headers
-X_FRAME_OPTIONS = 'DENY'              # Protect against clickjacking
-SECURE_CONTENT_TYPE_NOSNIFF = True    # Prevent MIME type sniffing
-SECURE_BROWSER_XSS_FILTER = True      # Enable browser XSS filter
+X_FRAME_OPTIONS = 'DENY'                 # Prevent clickjacking
+SECURE_CONTENT_TYPE_NOSNIFF = True       # Prevent MIME type sniffing
+SECURE_BROWSER_XSS_FILTER = True         # Enable browser XSS filter
 
-# Proxy SSL header (required if behind reverse proxy)
+# Must be EXACT for ALX: proxy SSL header
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
 
 # Content Security Policy (CSP)
 CSP_DEFAULT_SRC = ("'self'",)
