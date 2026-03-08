@@ -1,9 +1,16 @@
 from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from .models import Post
 
-
+@login_required
+def profile_view(request):
+    if request.method == "POST":
+        request.user.email = request.POST.get("email")
+        request.user.save()
+        return redirect("profile")
+    return render(request, "blog/profile.html")
 
 def home(request):
     return render(request, "blog/base.html")
