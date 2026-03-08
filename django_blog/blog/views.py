@@ -28,3 +28,12 @@ def profile(request):
 
 def home(request):
     return render(request, "blog/base.html")
+
+def login_view(request):
+    return render(request, "blog/login.html")
+
+def register_view(request):
+    return render(request, "blog/register.html")
+
+def profile_view(request):
+    return render(request, "blog/profile.html")
