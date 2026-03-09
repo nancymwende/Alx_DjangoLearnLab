@@ -1,9 +1,9 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from .models import Post
-
+from .models import Comment, Post
+from .forms import CommentForm
 @login_required
 def profile_view(request):
     if request.method == "POST":
@@ -11,6 +11,51 @@ def profile_view(request):
         request.user.save()
         return redirect("profile")
     return render(request, "blog/profile.html")
+
+
+@login_required
+def add_comment(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+
+    if request.method == "POST":
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.post = post
+            comment.author = request.user
+            comment.save()
+            return redirect("post-detail", pk=post.pk)
+        
+
+@login_required
+def edit_comment(request, pk):
+    comment = get_object_or_404(Comment, pk=pk)
+
+    if comment.author != request.user:
+        return redirect("post-detail", pk=comment.post.pk)
+
+    if request.method == "POST":
+        form = CommentForm(request.POST, instance=comment)
+        if form.is_valid():
+            form.save()
+            return redirect("post-detail", pk=comment.post.pk)
+    else:
+        form = CommentForm(instance=comment)
+
+    return render(request, "blog/comment_form.html", {"form": form})
+
+@login_required
+def delete_comment(request, pk):
+    comment = get_object_or_404(Comment, pk=pk)
+
+    if comment.author != request.user:
+        return redirect("post-detail", pk=comment.post.pk)
+
+    if request.method == "POST":
+        comment.delete()
+        return redirect("post-detail", pk=comment.post.pk)
+
+    return render(request, "blog/comment_confirm_delete.html", {"comment": comment})
 
 def home(request):
     return render(request, "blog/base.html")
