@@ -27,3 +27,17 @@
 {% empty %}
 <p>No comments yet.</p>
 {% endfor %}
+
+
+{% if user.is_authenticated %}
+<h3>Add Comment</h3>
+
+<form method="POST" action="{% url 'add-comment' object.id %}">
+{% csrf_token %}
+<textarea name="content" rows="3"></textarea>
+<button type="submit">Post Comment</button>
+</form>
+
+{% else %}
+<p>You must log in to comment.</p>
+{% endif %}
