@@ -10,3 +10,20 @@
 <a href="{% url 'post-delete' object.id %}">Delete</a>
 
 {% endblock %}
+
+
+<h3>Comments</h3>
+
+{% for comment in object.comments.all %}
+<div>
+<p><strong>{{ comment.author }}</strong></p>
+<p>{{ comment.content }}</p>
+
+{% if user == comment.author %}
+<a href="{% url 'edit-comment' comment.id %}">Edit</a>
+<a href="{% url 'delete-comment' comment.id %}">Delete</a>
+{% endif %}
+</div>
+{% empty %}
+<p>No comments yet.</p>
+{% endfor %}
