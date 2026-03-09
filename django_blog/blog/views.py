@@ -177,3 +177,13 @@ def posts_by_tag(request, tag_name):
         "tag_name": tag_name,
         "posts": posts
     })
+
+
+class PostByTagListView(ListView):
+    model = Post
+    template_name = "blog/tag_posts.html"  # your template
+    context_object_name = "posts"
+
+    def get_queryset(self):
+        tag_slug = self.kwargs.get("tag_slug")
+        return Post.objects.filter(tags__slug=tag_slug)
