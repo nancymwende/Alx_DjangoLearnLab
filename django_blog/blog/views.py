@@ -169,3 +169,11 @@ def search_posts(request):
         "query": query,
         "posts": posts
     })
+
+def posts_by_tag(request, tag_name):
+    posts = Post.objects.filter(tags__name__icontains=tag_name)
+
+    return render(request, "blog/tag_posts.html", {
+        "tag_name": tag_name,
+        "posts": posts
+    })
