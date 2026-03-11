@@ -20,7 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-^(nsxbb51qxi7jqc--9uy-@gfpi9a)r+f8q-qq)nt7du%g1!nr'
+SECRET_KEY = 'django-insecure-=v2eccd!6$!2webes$_!6j-^sl2e6da8bh(y4yfz+ppd#w6s=-'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -31,33 +31,14 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    # Default Django apps
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
-    # Third-party apps
-    'rest_framework',
-    'rest_framework.authtoken',
-    
-    'accounts',
-
-
 ]
 
-
-# Custom user model
-AUTH_USER_MODEL = 'accounts.User'
-
-# Django REST Framework default authentication
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.TokenAuthentication',
-    ],
-}
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
