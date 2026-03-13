@@ -1,11 +1,10 @@
 from django.shortcuts import render
-from rest_framework import generics, status
+from rest_framework import generics, status,permissions
 from rest_framework.response import Response
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAunthenticated
 from django.contrib.auth import authenticate, get_user_model
 from rest_framework.authtoken.models import Token
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAuthenticated
 from .serializers import RegisterSerializer, LoginSerializer, UserSerializer
 
 CustomUser = get_user_model()
@@ -101,4 +100,4 @@ class UserListView(generics.ListAPIView):
     """
     queryset = CustomUser.objects.all()
     serializer_class = UserSerializer
-    permission_classes = [permissions.IsAuthenticate]
+    permission_classes = [permissions.IsAuthenticated]
