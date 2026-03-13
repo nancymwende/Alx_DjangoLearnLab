@@ -7,7 +7,7 @@ from rest_framework.authtoken.models import Token
 from rest_framework.decorators import api_view, permission_classes
 from .serializers import RegisterSerializer, LoginSerializer, UserSerializer
 
-CustomUser = get_user_model()
+User = get_user_model()
 
 
 
