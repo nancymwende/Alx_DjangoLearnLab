@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from rest_framework import viewsets, permissions, filters
+from rest_framework import viewsets, permissions, filters, generics
 from .models import Post, Comment, Like
 from .serializers import PostSerializer, CommentSerializer
 from rest_framework.pagination import PageNumberPagination
@@ -8,8 +8,6 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from django.contrib.contenttypes.models import ContentType
 from notifications.models import Notification
-
-
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
@@ -27,12 +25,9 @@ def feed(request):
 @permission_classes([IsAuthenticated])
 def like_post(request, pk):
 
-    post = Post.objects.get(pk=pk)
+    post = generics.get_object_or_404(Post, pk=pk)
 
-    like, created = Like.objects.get_or_create(
-        user=request.user,
-        post=post
-    )
+    like, created = Like.objects.get_or_create(user=request.user, post=post)
 
     if not created:
         return Response({"message": "You already liked this post"})
@@ -46,7 +41,6 @@ def like_post(request, pk):
     )
 
     return Response({"message": "Post liked"})
-
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
