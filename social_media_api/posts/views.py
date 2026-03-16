@@ -1,11 +1,13 @@
 from django.shortcuts import render
 from rest_framework import viewsets, permissions, filters
-from .models import Post, Comment
+from .models import Post, Comment, Like
 from .serializers import PostSerializer, CommentSerializer
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from django.contrib.contenttypes.models import ContentType
+from notifications.models import Notification
 
 
 
@@ -20,6 +22,44 @@ def feed(request):
     serializer = PostSerializer(posts, many=True)
 
     return Response(serializer.data)
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def like_post(request, pk):
+
+    post = Post.objects.get(pk=pk)
+
+    like, created = Like.objects.get_or_create(
+        user=request.user,
+        post=post
+    )
+
+    if not created:
+        return Response({"message": "You already liked this post"})
+
+    Notification.objects.create(
+        recipient=post.author,
+        actor=request.user,
+        verb="liked your post",
+        content_type=ContentType.objects.get_for_model(post),
+        object_id=post.id
+    )
+
+    return Response({"message": "Post liked"})
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def unlike_post(request, pk):
+
+    post = Post.objects.get(pk=pk)
+
+    Like.objects.filter(
+        user=request.user,
+        post=post
+    ).delete()
+
+    return Response({"message": "Post unliked"})
 
 class StandardResultsSetPagination(PageNumberPagination):
     page_size = 10
